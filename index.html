@@ -6,18 +6,25 @@
   </head>
   <body>
     <h1>Crypto Spot Prices</h1>
-    <h4>Powered by: <img src="https://www.covalenthq.com/static/images/covalent-logo.png" alt="Covalent Logo" class="covalent"></h4>
-    <h4>Author: Cuegod</h4>
-    <label for="new-token">Add A New Token:</label>
-    <input type="search" id="new-token" name="new-token">
-    <button id="addButton">Add</button>
-    <br/>
-    <br/>
-    <label for="old-token">Remove An Existing Token:</label>
-    <input type="search" id="old-token" name="old-token">
-    <button id="removeButton">Remove</button>
-    <br/>
-    <br/>
+    <h4>Powered by: <img src="https://www.covalenthq.com/static/images/covalent-logo.png" alt="Covalent Logo" class="covalent">
+        <label class="switch">
+            <input type="checkbox" id="toggle">
+            <span class="slider round"></span>
+        </label>
+    </h4>
+    <div id="moreToken" class="hidden">
+        <h4>Author: Cuegod</h4>
+        <label for="new-token">Add A New Token:</label>
+        <input type="search" id="new-token" name="new-token">
+        <button id="addButton">Add</button>
+        <br/>
+        <br/>
+        <label for="old-token">Remove An Existing Token:</label>
+        <input type="search" id="old-token" name="old-token">
+        <button id="removeButton">Remove</button>
+        <br/>
+        <br/>
+    </div>
     <table id="tokenTable">
         <thead>
             <tr>
