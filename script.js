@@ -5,15 +5,20 @@ const APIKEY = 'onemillionwallets';
 const tableRef = document.getElementById('tokenTable').getElementsByTagName('tbody')[0];
 tableRef.innerHTML = "";
 
+let initialTokens = ["BTC", "WETH", "DOT", "YFI", "SNX"];
+localStorage.setItem('tokens', JSON.stringify(initialTokens));
+
 // Covalent API request setup
 const url = new URL(`https://api.covalenthq.com/v1/pricing/tickers/`);
-url.search = new URLSearchParams({
-    key: APIKEY,
-    tickers: ["BTC", "WETH", "DOT", "YFI", "AAVE"]
-})
+
+document.getElementById("searchButton").addEventListener("click", addNewToken);
 
 // Use Fetch API to get Covalent data and display in token table
 function getSpotPrices(url) {
+    url.search = new URLSearchParams({
+        key: APIKEY,
+        tickers: JSON.parse(localStorage.getItem('tokens'))
+    })
     fetch(url)
         .then((resp) => resp.json())
         .then(function(data) {
@@ -27,6 +32,24 @@ function getSpotPrices(url) {
                     `<td class="token"> $${parseFloat(token.quote_rate).toFixed(2)} </td>`
             })
         })
+}
+
+function addNewToken() {
+    const newToken = document.getElementById("new-token").value;
+    document.getElementById("new-token").value = "";
+    saveNewTokenToLocalStorage(newToken)
+    getSpotPrices(url)
+}
+
+function saveNewTokenToLocalStorage(newToken)
+{
+    let tokens = [];
+    // Parse the serialized data back into an aray of objects
+    tokens = JSON.parse(localStorage.getItem('tokens')) || [];
+    // Push the new data (whether it be an object or anything else) onto the array
+    tokens.push(newToken);
+    // Re-serialize the array back into a string and store it in localStorage
+    localStorage.setItem('tokens', JSON.stringify(tokens));
 }
 
 //Update the spot price every 30 seconds which is also the refresh rate of Covalent API
