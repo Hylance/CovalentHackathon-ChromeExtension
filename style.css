@@ -1,1 +1,14 @@
 /* Add styling here! */
+.token-logo {
+    height: 40px;
+    width: 40px;
+}
+.token {
+    text-align: center;
+}
+.covalent {
+    width: 25%;
+    height: auto;
+    margin-left: 10px;
+    margin-top: 5px;
+}
