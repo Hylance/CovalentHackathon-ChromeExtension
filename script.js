@@ -11,7 +11,8 @@ localStorage.setItem('tokens', JSON.stringify(initialTokens));
 // Covalent API request setup
 const url = new URL(`https://api.covalenthq.com/v1/pricing/tickers/`);
 
-document.getElementById("searchButton").addEventListener("click", addNewToken);
+document.getElementById("addButton").addEventListener("click", addNewToken);
+document.getElementById("removeButton").addEventListener("click", removeOldToken);
 
 // Use Fetch API to get Covalent data and display in token table
 function getSpotPrices(url) {
@@ -41,13 +42,32 @@ function addNewToken() {
     getSpotPrices(url)
 }
 
-function saveNewTokenToLocalStorage(newToken)
-{
+function removeOldToken() {
+    const oldToken = document.getElementById("old-token").value;
+    document.getElementById("old-token").value = "";
+    removeOldTokenFromLocalStorage(oldToken)
+    getSpotPrices(url)
+}
+
+function saveNewTokenToLocalStorage(newToken) {
     let tokens = [];
     // Parse the serialized data back into an aray of objects
     tokens = JSON.parse(localStorage.getItem('tokens')) || [];
     // Push the new data (whether it be an object or anything else) onto the array
     tokens.push(newToken);
+    // Re-serialize the array back into a string and store it in localStorage
+    localStorage.setItem('tokens', JSON.stringify(tokens));
+}
+
+function removeOldTokenFromLocalStorage(oldToken) {
+    let tokens = [];
+    // Parse the serialized data back into an aray of objects
+    tokens = JSON.parse(localStorage.getItem('tokens')) || [];
+    // Push the new data (whether it be an object or anything else) onto the array
+    const index = tokens.indexOf(oldToken);
+    if (index > -1) {
+        tokens.splice(index, 1);
+    }
     // Re-serialize the array back into a string and store it in localStorage
     localStorage.setItem('tokens', JSON.stringify(tokens));
 }
