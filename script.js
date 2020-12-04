@@ -5,7 +5,7 @@ const APIKEY = 'onemillionwallets';
 const tableRef = document.getElementById('tokenTable').getElementsByTagName('tbody')[0];
 tableRef.innerHTML = "";
 
-let initialTokens = ["BTC", "WETH", "DOT", "YFI", "SNX"];
+let initialTokens = ["BTC", "WETH", "AAVE", "YFI", "SNX"];
 localStorage.setItem('tokens', JSON.stringify(initialTokens));
 
 // Covalent API request setup
@@ -38,15 +38,15 @@ function getSpotPrices(url) {
 function addNewToken() {
     const newToken = document.getElementById("new-token").value;
     document.getElementById("new-token").value = "";
-    saveNewTokenToLocalStorage(newToken)
-    getSpotPrices(url)
+    saveNewTokenToLocalStorage(newToken.toUpperCase());
+    getSpotPrices(url);
 }
 
 function removeOldToken() {
     const oldToken = document.getElementById("old-token").value;
     document.getElementById("old-token").value = "";
-    removeOldTokenFromLocalStorage(oldToken)
-    getSpotPrices(url)
+    removeOldTokenFromLocalStorage(oldToken.toUpperCase());
+    getSpotPrices(url);
 }
 
 function saveNewTokenToLocalStorage(newToken) {
