@@ -19,12 +19,21 @@ document.getElementById("toggle").addEventListener("click", toggle);
 function getSpotPrices(url) {
 
     chrome.storage.sync.get('storedTokens', function(result) {
-        url.search = new URLSearchParams({
-            key: APIKEY,
-            tickers: result.storedTokens || []
-        })
-        fetchUrl(url)
+        if(result.storedTokens.length > 0) {
+            url.search = new URLSearchParams({
+                key: APIKEY,
+                tickers: result.storedTokens
+            })
+            fetchUrl(url)
+        } else {
+            showEmptyMessage();
+        }
     })
+}
+
+function showEmptyMessage() {
+    document.getElementById('tokenTable').classList.add("hidden");
+    document.getElementById('empty-warning').innerText = "You don't have any saved tokens yet. \n Click on the toggle above to add a new token you like."
 }
 
 function fetchUrl(url) {
@@ -33,26 +42,44 @@ function fetchUrl(url) {
         .then(function(data) {
             let tokens = data.data.items;
             tableRef.innerHTML = "";
-            return tokens.map(function(token) { // Map through the results and for each run the code below
-                tableRef.insertRow().innerHTML =
-                    `<td><img src=${token.logo_url} class="token-logo"></td>` +
-                    `<td class="token"> ${token.contract_name} </td>` +
-                    `<td class="token"> ${token.contract_ticker_symbol} </td>` +
-                    `<td class="token"> $${parseFloat(token.quote_rate).toFixed(2)} </td>`
-            })
+            if (tokens.length > 0) {
+                if (document.getElementById('tokenTable').classList.contains("hidden")) {
+                    document.getElementById('tokenTable').classList.remove("hidden");
+                    document.getElementById('empty-warning').innerText = "";
+                }
+                return tokens.map(function(token) { // Map through the results and for each run the code below
+                    tableRef.insertRow().innerHTML =
+                        `<td><img src=${token.logo_url} class="token-logo"></td>` +
+                        `<td class="token"> ${token.contract_name} </td>` +
+                        `<td class="token"> ${token.contract_ticker_symbol} </td>` +
+                        `<td class="token"> $${parseFloat(token.quote_rate).toFixed(2)} </td>`
+                })
+            } else if (!document.getElementById('tokenTable').classList.contains("hidden")) {
+                showEmptyMessage();
+            }
         })
 }
 
 function addNewToken() {
-    const newToken = document.getElementById("new-token").value;
+    let newToken = document.getElementById("new-token").value.toUpperCase();
     document.getElementById("new-token").value = "";
-    saveNewTokenToLocalStorage(newToken.toUpperCase());
+    if(newToken === "WETH") {
+        newToken = "ETH"
+    } else if (newToken === "WBTC") {
+        newToken = "BTC"
+    }
+    saveNewTokenToLocalStorage(newToken);
 }
 
 function removeOldToken() {
-    const oldToken = document.getElementById("old-token").value;
+    let oldToken = document.getElementById("old-token").value.toUpperCase();
+    if(oldToken === "WETH") {
+        oldToken = "ETH"
+    } else if (oldToken === "WBTC") {
+        oldToken = "BTC"
+    }
     document.getElementById("old-token").value = "";
-    removeOldTokenFromLocalStorage(oldToken.toUpperCase());
+    removeOldTokenFromLocalStorage(oldToken);
 }
 
 function toggle() {
