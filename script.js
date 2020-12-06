@@ -108,10 +108,13 @@ function saveNewTokenToLocalStorage(newToken) {
     //localStorage.setItem('tokens', JSON.stringify(tokens));
     chrome.storage.sync.get('storedTokens', function(result) {
         let storedTokens = result.storedTokens || [];
-        storedTokens.push(newToken);
-        chrome.storage.sync.set({'storedTokens': storedTokens}, function() {
-            getSpotPrices(url)
-        });
+        const index = storedTokens.indexOf(newToken);
+        if (index <= -1) {
+            storedTokens.push(newToken);
+            chrome.storage.sync.set({'storedTokens': storedTokens}, function() {
+                getSpotPrices(url)
+            });
+        }
     });
 }
 
