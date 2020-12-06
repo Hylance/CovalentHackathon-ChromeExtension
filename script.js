@@ -14,6 +14,7 @@ const url = new URL(`https://api.covalenthq.com/v1/pricing/tickers/`);
 document.getElementById("addButton").addEventListener("click", addNewToken);
 document.getElementById("removeButton").addEventListener("click", removeOldToken);
 document.getElementById("toggle").addEventListener("click", toggle);
+document.getElementById("clear").addEventListener("click", clear);
 
 // Use Fetch API to get Covalent data and display in token table
 function getSpotPrices(url) {
@@ -34,6 +35,12 @@ function getSpotPrices(url) {
 function showEmptyMessage() {
     document.getElementById('tokenTable').classList.add("hidden");
     document.getElementById('empty-warning').innerText = "You don't have any saved tokens yet. \n Click on the toggle above to add a new token you like."
+}
+
+function clear() {
+    chrome.storage.sync.set({'storedTokens': []}, function() {
+        getSpotPrices(url)
+    });
 }
 
 function fetchUrl(url) {

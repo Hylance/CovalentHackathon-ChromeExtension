@@ -81,3 +81,8 @@ input:checked + .slider:before {
 #title {
     min-width: 240px;
 }
+
+#clear {
+    text-decoration: underline;
+    cursor: pointer;
+}
