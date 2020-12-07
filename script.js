@@ -5,9 +5,6 @@ const APIKEY = 'onemillionwallets';
 const tableRef = document.getElementById('tokenTable').getElementsByTagName('tbody')[0];
 tableRef.innerHTML = "";
 
-//let initialTokens = ["BTC", "WETH"];
-//localStorage.setItem('tokens', JSON.stringify(initialTokens));
-
 // Covalent API request setup
 const url = new URL(`https://api.covalenthq.com/v1/pricing/tickers/`);
 
